@@ -25,7 +25,7 @@ import java.util.Map;
 public class AIPermissionRequest {
 
     private static final String TAG = AIPermissionRequest.class.getSimpleName();
-
+    //把會用到的權限存起來+他們對應的代碼(CODE)
     private static String[] PERMISSIONS_CONTACT = {Manifest.permission.READ_CONTACTS};
     private static final int REQUEST_CONTACTS = 1;
 
@@ -56,14 +56,14 @@ public class AIPermissionRequest {
     public static final String PERMISSION_WRITE_EXTERNAL_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
     public static final String PERMISSION_READ_CONTACTS = Manifest.permission.READ_CONTACTS;
 
-    private static final String[] requestPermissions = {
+    private static final String[] requestPermissions = {   //放所有的權限
             PERMISSION_RECORD_AUDIO,
             PERMISSION_READ_PHONE_STATE,
             PERMISSION_WRITE_EXTERNAL_STORAGE,
             PERMISSION_READ_CONTACTS,
     };
 
-    public interface PermissionGrant {
+    public interface PermissionGrant {     //一個確認權限是否被授權的介面
         void onPermissionGranted(int requestCode);
     }
 
@@ -158,18 +158,19 @@ public class AIPermissionRequest {
     /**
      * 一次申请多个权限
      */
-    public void requestMultiPermissions(final Activity activity, PermissionGrant grant) {
+    public void requestMultiPermissions(final Activity activity, PermissionGrant grant) { //參數：哪個Activity會用到
 
-        final List<String> permissionsList = getNoGrantedPermission(activity, false);
-        final List<String> shouldRationalePermissionsList = getNoGrantedPermission(activity, true);
+        final List<String> permissionsList = getNoGrantedPermission(activity, false);   //這種 permission是沒跟使用者詢問就存取的
+        final List<String> shouldRationalePermissionsList = getNoGrantedPermission(activity, true);  //這種則是會用 AlertDialog 跟使用者確認過再存取
 
-        //TODO checkSelfPermission
+        //TODO checkSelfPermission   如果都有被准許，getNoGrantedPermission回傳的 String[] 就不會有東西 代表不用再request了
         if (permissionsList == null || shouldRationalePermissionsList == null) {
             return;
         }
         Log.d(TAG, "requestMultiPermissions permissionsList:" + permissionsList.size() + ",shouldRationalePermissionsList:" + shouldRationalePermissionsList.size());
 
-        if (permissionsList.size() > 0) {
+        //都是跟ActivityCompat.requestPermissions拿權限
+        if (permissionsList.size() > 0) {   //如果要申請 >> 把 permissionsList 放到 String[]內
             ActivityCompat.requestPermissions(activity, permissionsList.toArray(new String[permissionsList.size()]),
                     CODE_MULTI_PERMISSION);
             Log.d(TAG, "showMessageOKCancel requestPermissions");
@@ -184,8 +185,8 @@ public class AIPermissionRequest {
                             Log.d(TAG, "showMessageOKCancel requestPermissions");
                         }
                     });
-        } else {
-            grant.onPermissionGranted(CODE_MULTI_PERMISSION);
+        } else {  //如果沒有要申請的 >>
+            grant.onPermissionGranted(CODE_MULTI_PERMISSION);   //因為onPermissionGranted的case沒有 CODE_MULTI_PERMISSION ，所以會直接 break
         }
 
     }
@@ -258,7 +259,6 @@ public class AIPermissionRequest {
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
-
     }
 
     /**
@@ -327,18 +327,18 @@ public class AIPermissionRequest {
      * @param isShouldRationale true: return no granted and shouldShowRequestPermissionRationale permissions, false:return no granted and !shouldShowRequestPermissionRationale
      * @return
      */
-    public ArrayList<String> getNoGrantedPermission(Activity activity, boolean isShouldRationale) {
+    public ArrayList<String> getNoGrantedPermission(Activity activity, boolean isShouldRationale) {   //getNoGrantedPermission=沒有被授予准許，只有沒有被准許的指令才需要 request   isShouldRationale決定 shouldShowRequestPermissionRationale 或 !shouldShowRequestPermissionRationale
 
         ArrayList<String> permissions = new ArrayList<>();
 
-        for (int i = 0; i < requestPermissions.length; i++) {
-            String requestPermission = requestPermissions[i];
+        for (int i = 0; i < requestPermissions.length; i++) {  //requestPermissions.length 是在開頭宣告的 permission的 String陣列的長度(共有幾個permisson)
+            String requestPermission = requestPermissions[i];  //拿到對應index的permission
 
 
             //TODO checkSelfPermission
             int checkSelfPermission = -1;
             try {
-                checkSelfPermission = ActivityCompat.checkSelfPermission(activity, requestPermission);
+                checkSelfPermission = ActivityCompat.checkSelfPermission(activity, requestPermission);   //to check is permission is granted already or not
             } catch (RuntimeException e) {
                 Toast.makeText(activity, "please open those permission", Toast.LENGTH_SHORT)
                         .show();
@@ -346,27 +346,25 @@ public class AIPermissionRequest {
                 return null;
             }
 
-            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {  // 去check 這個 permission有沒有被准許 如果 if 為 True ，代表沒有被准許
                 Log.i(TAG, "getNoGrantedPermission ActivityCompat.checkSelfPermission != PackageManager.PERMISSION_GRANTED:" + requestPermission);
 
-                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, requestPermission)) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(activity, requestPermission)) {     // shouldShowRequestPermissionRationale： Gets whether you should show UI with rationale before requesting a permission.
                     Log.d(TAG, "shouldShowRequestPermissionRationale if");
                     if (isShouldRationale) {
                         permissions.add(requestPermission);
                     }
 
                 } else {
-
                     if (!isShouldRationale) {
                         permissions.add(requestPermission);
                     }
                     Log.d(TAG, "shouldShowRequestPermissionRationale else");
                 }
-
             }
         }
 
-        return permissions;
+        return permissions;  //回傳的都是 沒被准許的 permission ，差在 isShouldRationale決定的 shouldShowRequestPermissionRationale 或 !shouldShowRequestPermissionRationale
     }
 
 

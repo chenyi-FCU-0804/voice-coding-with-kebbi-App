@@ -27,15 +27,17 @@ public class LocalcmdAndCloudASRActivity extends AppCompatActivity {
     NuwaRobotAPI mRobotAPI;
     IClientId mClientId;
 
-    boolean mSDKinit = false;
+    boolean mSDKinit = false;   //確認SDK初始化
     EditText mResult;
     Button mStartBtn;
     Button mStopBtn;
 
-    //prepare local command list
+    //prepare local command list   自訂的指令
     ArrayList<String> cmdList = new ArrayList<String>() {{
-        add("今日の天気");
-        add("おはよう");
+        add("今天天氣");
+        add("早安");
+        add("前進");
+        add("for");
     }};//you can customize this list
 
     @Override
@@ -317,7 +319,7 @@ public class LocalcmdAndCloudASRActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onMixUnderstandComplete(boolean isError, ResultType resultType, String s) {
+        public void onMixUnderstandComplete(boolean isError, ResultType resultType, String s) { //接收語音識別結果
             Log.d(TAG, "onMixUnderstandComplete isError:" + !isError + ", json:" + s);
             //Step 7 : Robot recognized the word of user speaking on  onMixUnderstandComplete
             //both startMixUnderstand and startLocalCommand will receive this callback

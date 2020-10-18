@@ -18,11 +18,11 @@ public class ActivityUtils {
     public static final String KEY_NAME = "name";
 
     public static ArrayList<ActivityBean> pullXML(Context context, String fileName) {
-        ArrayList<ActivityBean> activityBeanList = null;
+        ArrayList<ActivityBean> activityBeanList = null;    //一個放 ActivityBean的List
         ActivityBean activityBean = null;
         try {
             InputStream inputStream = context.getAssets().open(fileName);
-            XmlPullParser parser = Xml.newPullParser();
+            XmlPullParser parser = Xml.newPullParser();  //讀取XML檔
             parser.setInput(inputStream, "utf-8");
             int type = parser.getEventType();
             while (type != XmlPullParser.END_DOCUMENT) {

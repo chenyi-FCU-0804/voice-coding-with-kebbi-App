@@ -1,6 +1,5 @@
 package com.nuwarobotics.example.motion;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -67,7 +66,7 @@ public class MotionTtsExampleActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(TAG);
 
-        mStartDemoBtn = (Button)findViewById(R.id.button);
+        mStartDemoBtn = (Button)findViewById(R.id.button_login);
 
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());

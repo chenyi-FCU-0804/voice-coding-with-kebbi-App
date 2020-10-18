@@ -21,7 +21,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">32sp</item>
     </style>
-    
+
     <style name="SDK.Motion.Example.Primary.Theme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

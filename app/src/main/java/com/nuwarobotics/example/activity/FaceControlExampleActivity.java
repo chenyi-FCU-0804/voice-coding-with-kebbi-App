@@ -24,19 +24,19 @@ import com.nuwarobotics.service.facecontrol.utils.ServiceConnectListener;
  * - How to control mouth on off animation.
  * Target SDK : 2.1.0.02
  */
-public class FaceControlExampleActivity extends BaseAppCompatActivity {
+public class FaceControlExampleActivity extends BaseAppCompatActivity {    //還有問題!!!!!!!!!!! 凱比的臉在執行完TTS後關不掉
     private final static String TAG = "FaceControlExampleActivity";
 
     //nuwa general style of close button
-    ImageButton mCloseBtn;
-    Button mBtn_start ;
+    ImageButton mCloseBtn;  //離開按鈕
+    Button mBtn_start ; //開始demo按鈕
 
     NuwaRobotAPI mRobotAPI;
     IClientId mClientId;
     Context mContext ;
 
-    private static final String TTS_SAMPLE = "Kebbi is speaking with face" ;
-    private static final long FACE_MOUTH_SPEED = 200;//set larger value for slower mouth speed
+    private static final String TTS_SAMPLE = "講完話應該要關掉臉吧?" ;
+    private static final long FACE_MOUTH_SPEED = 200;//set larger value for slower mouth speed  值越大嘴巴動越慢
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class FaceControlExampleActivity extends BaseAppCompatActivity {
             @Override
             public void onClick(View view) {
                 //Please make sure enable power key when leave ui
-                showface(TTS_SAMPLE);
+                showface(TTS_SAMPLE);  //參數=String=要凱比說的話
             }
         });
 
@@ -59,7 +59,7 @@ public class FaceControlExampleActivity extends BaseAppCompatActivity {
             public void onClick(View view) {
                 //Please make sure enable power key when leave ui
                 if(mRobotAPI!=null){
-                    mRobotAPI.enablePowerKey();
+                    mRobotAPI.enablePowerKey();  //在離開的時候讓 powerkey變回可以點擊
                 }
                 finish();
             }
@@ -305,12 +305,12 @@ public class FaceControlExampleActivity extends BaseAppCompatActivity {
         }
 
         @Override
-        public void onTTSComplete(boolean isError) {
+        public void onTTSComplete(boolean isError) {  //這邊確實有被觸發，
             Log.d(TAG, "onTTSComplete:" + !isError);
             //you could postDelay a timing to hide face for better user experience
             mouthOff();
             hideface();
-
+            //Log.d(TAG, "whycanti:" + !isError);
         }
 
         @Override

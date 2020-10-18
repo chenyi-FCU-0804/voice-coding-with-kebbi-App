@@ -1,51 +1,48 @@
-package com.nuwarobotics.example.activity;
-
+package com.nuwarobotics.example.SimpleDemo;
+/*先做一個粗略版的前進 後退 左轉 右轉
+*
+* */
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.ImageButton;
+import android.view.MenuItem;
 
 import com.nuwarobotics.example.R;
-import com.nuwarobotics.example.motion.base.BaseAppCompatActivity;
 import com.nuwarobotics.service.IClientId;
 import com.nuwarobotics.service.agent.NuwaRobotAPI;
 import com.nuwarobotics.service.agent.RobotEventListener;
+import com.nuwarobotics.service.agent.VoiceEventListener;
 
-/**
- * Some 3rd app prefer not leave app by press power key
- * Example of call disablePowerKey() and enablePowerKey() API.
- * Target SDK : 2.0.0.08
- */
-public class DisablePowerkeyExampleActivity extends BaseAppCompatActivity {
-    private final static String TAG = "DisablePowerkeyExampleActivity";
+import java.util.ArrayList;
 
-    //nuwa general style of close button
-    ImageButton mCloseBtn;
+public class MainControlActivity extends AppCompatActivity {
 
+    private final String TAG = this.getClass().getSimpleName();
     NuwaRobotAPI mRobotAPI;
     IClientId mClientId;
+    //prepare local command list
+    ArrayList<String> cmdList = new ArrayList<String>() {{
+        add("前進");
+        add("後退");
+        add("左轉");
+        add("右轉");
+    }};//you can customize this list
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_disablepowerkey);
+        setContentView(R.layout.example_layout);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(TAG);
 
-        mCloseBtn = findViewById(R.id.imgbtn_quit);
-        mCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Please make sure enable power key when leave ui
-                if(mRobotAPI!=null){   //如果 powerkey有被無效化>>恢復他
-                    mRobotAPI.enablePowerKey();
-                }
-                finish();
-            }
-        });
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
         mRobotAPI = new NuwaRobotAPI(this,mClientId);
+
         //Step 2 : Register receive Robot Event
         Log.d(TAG,"register EventListener ") ;
         mRobotAPI.registerRobotEventListener(robotEventListener);//listen callback of robot service event
@@ -53,53 +50,33 @@ public class DisablePowerkeyExampleActivity extends BaseAppCompatActivity {
     }
 
     @Override
-    protected int getLayoutRes(){
-        return R.layout.activity_disablepowerkey;
-    }
-
-    @Override
-    protected int getToolBarTitleRes(){
-        return R.string.disablepowerkey_sdk_example_title;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        hideSystemUi();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //Please make sure enable power key when leave ui
-        if(mRobotAPI!=null){
-            mRobotAPI.enablePowerKey();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
+        // release Nuwa Robot SDK resource
+        mRobotAPI.release();
     }
 
-    protected void hideSystemUi() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
+
     RobotEventListener robotEventListener = new RobotEventListener() {
         @Override
         public void onWikiServiceStart() {
             // Nuwa Robot SDK is ready now, you call call Nuwa SDK API now.
             Log.d(TAG,"onWikiServiceStart, robot ready to be control ") ;
+            //Step 3 : Start Control Robot after Service ready.
+            //Register Voice Callback event
+            mRobotAPI.registerVoiceEventListener(voiceEventListener);//listen callback of robot voice related event
+            //Allow user start demo after service ready
+            //TODO
 
-            Log.d(TAG,"disablePowerKey");
-            mRobotAPI.disablePowerKey();
         }
 
         @Override
@@ -219,6 +196,58 @@ public class DisablePowerkeyExampleActivity extends BaseAppCompatActivity {
 
         @Override
         public void onMotorErrorEvent(int i, int i1) {
+
+        }
+    };
+    VoiceEventListener voiceEventListener = new VoiceEventListener() {
+        @Override
+        public void onWakeup(boolean b, String s, float v) {
+            Log.d(TAG, "onWakeup:" + !b + ", score:" + s);
+
+        }
+
+        @Override
+        public void onTTSComplete(boolean b) {
+
+        }
+
+        @Override
+        public void onSpeechRecognizeComplete(boolean b, ResultType resultType, String s) {
+
+        }
+
+        @Override
+        public void onSpeech2TextComplete(boolean b, String s) {
+
+        }
+
+        @Override
+        public void onMixUnderstandComplete(boolean b, ResultType resultType, String s) {
+
+        }
+
+        @Override
+        public void onSpeechState(ListenType listenType, SpeechState speechState) {
+
+        }
+
+        @Override
+        public void onSpeakState(SpeakType speakType, SpeakState speakState) {
+
+        }
+
+        @Override
+        public void onGrammarState(boolean b, String s) {
+
+        }
+
+        @Override
+        public void onListenVolumeChanged(ListenType listenType, int i) {
+
+        }
+
+        @Override
+        public void onHotwordChange(HotwordState hotwordState, HotwordType hotwordType, String s) {
 
         }
     };
