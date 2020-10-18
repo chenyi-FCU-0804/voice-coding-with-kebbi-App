@@ -22,7 +22,7 @@ public class LEDExampleActivity extends AppCompatActivity {
     IClientId mClientId;
     Button mBTN_DisableSystemLED, mBTN_EnableSystemLED;
     Button mBTN_FACE,mBTN_BODY,mBTN_HAND_LEFT,mBTN_HAND_RIGHT;
-    EditText mEditR,mEditG,mEditB;
+    EditText mEditR,mEditG,mEditB; //三個輸入顏色參數的EditText
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class LEDExampleActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.title_example_led);
 
         mBTN_DisableSystemLED = (Button)findViewById(R.id.btn_DisableSystemLED6);
-        mBTN_DisableSystemLED.setOnClickListener(new View.OnClickListener() {
+        mBTN_DisableSystemLED.setOnClickListener(new View.OnClickListener() {  //拿到LED控制權
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"onClick to Disable System LED") ;
@@ -44,7 +44,7 @@ public class LEDExampleActivity extends AppCompatActivity {
             }
         });
         mBTN_EnableSystemLED = (Button)findViewById(R.id.btn_EnableSystemLED);
-        mBTN_EnableSystemLED.setOnClickListener(new View.OnClickListener() {
+        mBTN_EnableSystemLED.setOnClickListener(new View.OnClickListener() { //把LED控制權還給系統
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"onClick to Enable System LED") ;
@@ -72,7 +72,7 @@ public class LEDExampleActivity extends AppCompatActivity {
 
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) { //home鍵處理
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -87,7 +87,7 @@ public class LEDExampleActivity extends AppCompatActivity {
         mRobotAPI.release();
     }
 
-    public void onLEDClick(View view){
+    public void onLEDClick(View view){ //設定四個部位的Button的 onClick
         /**
                 *API:setLedColor
                 * Set LED color to target LED.
@@ -120,7 +120,7 @@ public class LEDExampleActivity extends AppCompatActivity {
 
     }
 
-    RobotEventListener robotEventListener = new RobotEventListener() {
+    RobotEventListener robotEventListener = new RobotEventListener() {   //沒有很重要
         @Override
         public void onWikiServiceStart() {
             // Nuwa Robot SDK is ready now, you call call Nuwa SDK API now.

@@ -21,7 +21,7 @@ public class PlayMotionActivity extends BaseAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTexPlayStatus = findViewById(R.id.play_status);
+        mTexPlayStatus = findViewById(R.id.play_status);   // Button下面呈現 Motion狀況
 
         //Step 1 : Initial Nuwa API Object
         mClientId = new IClientId(this.getPackageName());
@@ -33,7 +33,7 @@ public class PlayMotionActivity extends BaseAppCompatActivity {
             mTexPlayStatus.setText("");
 
             //Step 2 : Execute "Play motion"
-            mRobotAPI.motionPlay(MOTION_SAMPLE, true);
+            mRobotAPI.motionPlay(MOTION_SAMPLE, true);    // fadein true效果：會有凱比的表情跟著Motion一起呈現    // false效果：沒有凱比的表情
         });
 
     }
@@ -47,7 +47,7 @@ public class PlayMotionActivity extends BaseAppCompatActivity {
 
     }
 
-    private RobotEventCallback robotEventCallback = new RobotEventCallback() {
+    private RobotEventCallback robotEventCallback = new RobotEventCallback() {   //隨著凱比 Motion的執行 ，下面的Sring都會漸漸出現在 TextView裡。
         @Override
         public void onStartOfMotionPlay(String s) {
             showEventMsg("Start Playing Motion...");
@@ -62,10 +62,10 @@ public class PlayMotionActivity extends BaseAppCompatActivity {
         public void onCompleteOfMotionPlay(String s) {
             showEventMsg("Play Motion Complete!!!");
 
-            //Step 3 : If (the parameter of motionPlay)auto_fadein is ture,
+            //Step 3 : If (the parameter of motionPlay)auto_fadein is ture,   如果有設定凱比的表情呈現 ，就要在動作結束時記得關掉他的臉。
             // the transparent view must be closed after motion is complete, error or other case.
             if(mRobotAPI != null){
-                mRobotAPI.hideWindow(true);
+                mRobotAPI.hideWindow(false);
             }
         }
 
@@ -79,7 +79,7 @@ public class PlayMotionActivity extends BaseAppCompatActivity {
             showEventMsg("When playing Motion, error happen!!! error code: " + i);
 
             if(mRobotAPI != null){
-                mRobotAPI.hideWindow(true);
+                mRobotAPI.hideWindow(false);
             }
         }
     };

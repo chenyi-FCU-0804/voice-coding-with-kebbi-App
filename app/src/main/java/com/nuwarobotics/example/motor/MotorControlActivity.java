@@ -130,8 +130,8 @@ public class MotorControlActivity extends AppCompatActivity {
         //init list view
         final ArrayList<String> listArray = new ArrayList<>(Arrays.asList(Motor.getStringArray()));   //就等於pyhton 的 list   ，asList=把 strings放到 list內
         mMotorListView = findViewById(R.id.motion_list);
-        mMotorListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, listArray));    //這邊的android.R.layout.simple_list_item_1在layout找不到
-                                                    //getApplicationContext()標註要在哪個activity內執行操做，還不太懂
+        mMotorListView.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, listArray));    //這邊的android.R.layout.simple_list_item_1是android內建的 layout
+                //http://aiur3908.blogspot.com/2015/06/android-listview.html
         mMotorListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

@@ -17,15 +17,15 @@ public class WindowControlWithMotionActivity extends BaseAppCompatActivity {
     private NuwaRobotAPI mRobotAPI;
     private IClientId mClientId;
 
-    private final String MOTION_SAMPLE = "987_EN_HappyBirthdayWaltz";
+    private final String MOTION_SAMPLE = "987_EN_HappyBirthdayWaltz"; //一個指定的 Motion
     private TextView mTexPlayStatus;
     Handler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mainHandler = new Handler(Looper.getMainLooper());
-
+        mainHandler = new Handler(Looper.getMainLooper());   //幫 main thread創造一個 message looper ，然後用 Handler處理訊息
+        //當 thread只有一個 Runable(任務)要跑，他不需要 Looper，但如果是多次執行，就要用上 Looper
 
         mTexPlayStatus = findViewById(R.id.play_status);
 
@@ -41,13 +41,13 @@ public class WindowControlWithMotionActivity extends BaseAppCompatActivity {
             //Step 2 : Execute "Play motion" without window
             //Notice: If motionPlay with paramter "auto_fadin = true", the displayed window should not be hidden.
             //        Because the method hideWindow() will execute motionStop to stop the current motion.
-            mRobotAPI.motionPlay(MOTION_SAMPLE, false);  //"auto_fadin" is false. The initial window is hidden.
+            mRobotAPI.motionPlay(MOTION_SAMPLE, false);  //"auto_fadin" is false. The initial window is hidden.   //若沒更改 Motion剛開始幾秒會以沒有 window的形式執行
 
         });
 
     }
 
-    Runnable showWindowRunable = ()->{
+    Runnable showWindowRunable = ()->{  //把凱比的臉給開起來
         if(mRobotAPI != null){
             showEventMsgOnTextView("[Handler]Show Window...");
 
@@ -65,7 +65,7 @@ public class WindowControlWithMotionActivity extends BaseAppCompatActivity {
                 return;
             }
 
-            mainHandler.postDelayed(showWindowRunable,6000);
+            mainHandler.postDelayed(showWindowRunable,6000); //這邊的延遲送出
         }
 
         @Override
@@ -74,7 +74,7 @@ public class WindowControlWithMotionActivity extends BaseAppCompatActivity {
         }
 
         @Override
-        public void onCompleteOfMotionPlay(String s) {
+        public void onCompleteOfMotionPlay(String s) {  //執行完成>>關掉 Window
             showEventMsgOnTextView("[Event]Play Motion Complete!!!");
 
             //Step 3 : Hide window for the displayed window
@@ -99,7 +99,7 @@ public class WindowControlWithMotionActivity extends BaseAppCompatActivity {
         }
     };
 
-    private void showEventMsg(TextView tv, String status){
+    private void showEventMsg(TextView tv, String status){ //更新 TextView跟 Log
         if(tv != null){
             runOnUiThread(()->tv.append(status + "\n"));
         }

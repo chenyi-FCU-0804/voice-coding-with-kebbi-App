@@ -285,7 +285,7 @@ public class TTSActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTTSComplete(boolean isError) {
+        public void onTTSComplete(boolean isError) {   //在唸完 + STOP時都會觸發
             Log.d(TAG, "onTTSComplete:" + !isError);
             setText("onTTSComplete, " + !isError, false);
 
@@ -319,7 +319,7 @@ public class TTSActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSpeakState(SpeakType speakType, SpeakState speakState) {
+        public void onSpeakState(SpeakType speakType, SpeakState speakState) {   //顯示現在 凱比說話的狀況
             Log.d(TAG, "onSpeakState:" + speakType + ", state:" + speakState);
         }
 

@@ -40,6 +40,7 @@ public class WakeupActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(TAG);
 
+        //先將 TextView 清空 +兩個按鈕 不能按
         mResult = (EditText) findViewById(R.id.text_result);
         mResult.setText("");
         mStartBtn = (Button) findViewById(R.id.btn_start);
@@ -74,8 +75,9 @@ public class WakeupActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //兩個 按鈕都在 XML檔 那設定了 onClick的function名，所以在這直接宣告+實作
     public void BtnStart(View view) {
-        if (!mSDKinit) {
+        if (!mSDKinit) { //確認已經API可以使用
             setText(getCurrentTime() + "need to do SDK init first !!!", false);
             return;
         }
@@ -84,7 +86,7 @@ public class WakeupActivity extends AppCompatActivity {
         //Step 3 : Start to wait wakeup trigger
         mRobotAPI.startWakeUp(true);
 
-        runOnUiThread(new Runnable() {
+        runOnUiThread(new Runnable() { //同時把 開始Button設定成不能按 + 結束Button設成可以按
             @Override
             public void run() {
                 mStartBtn.setEnabled(false);
@@ -121,8 +123,9 @@ public class WakeupActivity extends AppCompatActivity {
             @Override
             public void run() {
                 mResult.append(text);
-                if (!append)
+                if (!append)  //如果 append == false就換行
                     mResult.append("\n");
+                //下面兩個設定讓 TextView的字可以被選取 ，不過沒有顯示出效果。
                 mResult.setMovementMethod(ScrollingMovementMethod.getInstance());
                 mResult.setSelection(mResult.getText().length(), mResult.getText().length());
             }
@@ -135,10 +138,10 @@ public class WakeupActivity extends AppCompatActivity {
             // Nuwa Robot SDK is ready now, you call call Nuwa SDK API now.
             Log.d(TAG, "onWikiServiceStart, robot ready to be control");
             //Step 3 : Start Control Robot after Service ready.
-            //Register Voice Callback event
+            //Register Voice Callback event  因為會用到 語音，所以Voice也要註冊
             mRobotAPI.registerVoiceEventListener(voiceEventListener);//listen callback of robot voice related event
             //Allow user start demo after service ready
-            //TODO
+            //TODO  確定初始化完成
             setText("onWikiServiceStart, robot ready to be control", false);
             mSDKinit = true;
             mStartBtn.setEnabled(true);
@@ -266,7 +269,7 @@ public class WakeupActivity extends AppCompatActivity {
     };
     VoiceEventListener voiceEventListener = new VoiceEventListener() {
         @Override
-        public void onWakeup(boolean isError, String score, float direction) {
+        public void onWakeup(boolean isError, String score, float direction) {   // score丟回來的時候已經是 Json檔了
             //Step 4 : Get wakeup trigger
             Log.d(TAG, "onWakeup:" + !isError + ", score:" + score + ", direction:" + direction);
             String wakeup_word = VoiceResultJsonParser.parseVoiceResult(score);
@@ -275,7 +278,7 @@ public class WakeupActivity extends AppCompatActivity {
 
             runOnUiThread(new Runnable() {
                 @Override
-                public void run() {
+                public void run() {    //接收到指定的語音後 會更新Button狀態
                     mStartBtn.setEnabled(true);
                     mStopBtn.setEnabled(false);
                 }
@@ -293,7 +296,7 @@ public class WakeupActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSpeech2TextComplete(boolean isError, String json) {
+        public void onSpeech2TextComplete(boolean isError, String json) {    //確認語音轉換成文字 ，但沒看到他被call過
             Log.d(TAG, "onSpeech2TextComplete:" + !isError + ", json:" + json);
         }
 

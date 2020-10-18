@@ -33,19 +33,21 @@ public class MotionTtsExampleActivity extends AppCompatActivity {
     IClientId mClientId;
     Button mStartDemoBtn ;
 
-    Handler mHandler = new Handler();
+    Handler mHandler = new Handler(); //用來執行demo的 Handler
 
     private int mCmdStep = 0 ;
     private boolean mTts_complete = true;
     private boolean mMotion_complete = true;
 
     //Following is Action pair config
+    //可以自己新增 String(凱比會說的話) +對應的凱比 Motion
+    //兩個加起來=邊做邊說
     ArrayList<String> cmdTTS = new ArrayList<String>() {{
         add("");
-        add("こんにちは、僕はケビーです");
-        add("空が飛べたらいいのになあ");
-        add("無理だから、歩いていこう");
-        add("ぼく、動くのは得意なんですよ");
+        add("你好，我叫凱比");
+        add("要是能在空中飛就好了阿");
+        add("因為做不到，所以只能用走的");
+        add("我很擅長運動喔");
     }};//you can customize this list
     ArrayList<String> cmdMotion = new ArrayList<String>() {{
         add("666_RE_Hello");
@@ -73,22 +75,22 @@ public class MotionTtsExampleActivity extends AppCompatActivity {
 
         //Step 2 : Register receive Robot Event
         Log.d(TAG,"register EventListener ") ;
-        mRobotAPI.registerRobotEventListener(robotEventListener);//listen callback of robot service event
+        mRobotAPI.registerRobotEventListener(robotEventListener);//listen callback of robot service event 雖然名字跟之前不一樣，但都是在監聽凱比事件觸發的
 
         mStartDemoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"onClick to start start demo") ;
                 //Step 3 : reset command step and trigger action start thread
-                mCmdStep = 0 ;
-                mHandler.post(robotAction);//play next action
+                mCmdStep = 0 ;    //在ArrayList內的 index ，從0開始執行
+                mHandler.post(robotAction);//play next action  執行Demo的 Runable(任務)
             }
         });
 
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {  // home鍵處理
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -100,35 +102,36 @@ public class MotionTtsExampleActivity extends AppCompatActivity {
     Runnable robotAction = new Runnable() {
         @Override
         public void run() {
-            String current_tts = cmdTTS.get(mCmdStep);
-            String current_motion = cmdMotion.get(mCmdStep);
+            String current_tts = cmdTTS.get(mCmdStep);     //從兩個ArrayList拿到 index 0位置的 string
+            String current_motion = cmdMotion.get(mCmdStep); //與 Motion
             Log.d(TAG,"Action Step "+mCmdStep+" TTS:"+current_tts+" motion:"+current_motion);
             //Config waiting flag first.   (Example : use to wait two callback ready)
+            //如果兩個都有取到值 >> 將兩個 flag設為 false
             if(current_tts != "") mTts_complete = false;
             if(current_motion != "") mMotion_complete = false;
 
-            //Start play tts and motion if need
+            //Start play tts and motion if need  執行TTS and Motion
             if(current_tts != "") mRobotAPI.startTTS(current_tts);
 
             //Please NOTICE that auto_fadein should assign false when motion file nothing to display
-            if(current_motion != "") mRobotAPI.motionPlay(current_motion,false);
-
+            if(current_motion != "")mRobotAPI.motionPlay(current_motion,false);
 
             while(mTts_complete == false  || mMotion_complete == false){
-                //wait both action complete
+                //wait both action complete 等到兩個都完成
             }
 
             //both TTS and Motion complete, we play next action
             mCmdStep ++ ;//next action step
             if(mCmdStep < cmdTTS.size()) {
-                mHandler.post(robotAction);//play next action
+                mHandler.post(robotAction);//play next action  再跑一次robotAction
             }else{
                 mRobotAPI.motionReset();//Reset Robot pose to default
             }
         }
     };
 
-    RobotEventListener robotEventListener = new RobotEventListener() {
+    RobotEventListener robotEventListener = new RobotEventListener() {  //除了普通事件，還有監聽 語音事件 voiceEventListener
+        //他show出來了很多能運用的事件監聽function
         @Override
         public void onWikiServiceStart() {
             // Nuwa Robot SDK is ready now, you call call Nuwa SDK API now.
@@ -136,8 +139,8 @@ public class MotionTtsExampleActivity extends AppCompatActivity {
             //Step 3 : Start Control Robot after Service ready.
             //Register Voice Callback event
             mRobotAPI.registerVoiceEventListener(voiceEventListener);//listen callback of robot voice related event
-            //Allow user start demo after service ready
-            runOnUiThread(new Runnable() {
+            //Allow user start demo after service ready 在凱比API準備完後才允許開始Demo的按鈕被按
+            runOnUiThread(new Runnable() {   //新增一個 UI thread的任務
                 @Override
                 public void run() {
                     //Allow user click button.
@@ -178,7 +181,7 @@ public class MotionTtsExampleActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onCompleteOfMotionPlay(String s) {
+        public void onCompleteOfMotionPlay(String s) {    //當 Motion完成 >>mMotion_complete = true
             Log.d(TAG,"Play Motion Complete " + s);
             mMotion_complete = true;
         }
@@ -268,15 +271,15 @@ public class MotionTtsExampleActivity extends AppCompatActivity {
 
         }
     };
-    VoiceEventListener voiceEventListener = new VoiceEventListener() {
+    VoiceEventListener voiceEventListener = new VoiceEventListener() {    //語音事件監聽   這邊只有用到 onTTSComplete的function，其他function是在別的Activity會用的，不過因為要implent VoiceEventListener內部指定的 所以才寫空的出來
         @Override
-        public void onWakeup(boolean b, String s, float v) {
+        public void onWakeup(boolean b, String s, float v) {  //沒有看到這個function被觸發的 Log
             Log.d(TAG, "onWakeup:" + !b + ", score:" + s);
 
         }
 
         @Override
-        public void onTTSComplete(boolean b) {
+        public void onTTSComplete(boolean b) {  //當 TTS完成，mTts_complete = true
             Log.d(TAG, "onTTSComplete" + !b);
             mTts_complete = true;
 

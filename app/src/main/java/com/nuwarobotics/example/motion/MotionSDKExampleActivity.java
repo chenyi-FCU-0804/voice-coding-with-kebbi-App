@@ -22,14 +22,14 @@ public class MotionSDKExampleActivity extends BaseAppCompatActivity implements V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int[] btnResIdList = {
+        int[] btnResIdList = {   //存放 4個跟 Motion相關的按紐(數字)，按了就會去到對應的Activity。
                 R.id.btn_example1,
                 R.id.btn_example2,
                 R.id.btn_example3,
                 R.id.btn_example4
         };
 
-        for(int resId : btnResIdList){
+        for(int resId : btnResIdList){   //用for 來一次加上onClickListener
             Button btn = findViewById(resId);
 
             if(btn != null){

@@ -18,7 +18,7 @@ public class ControlMotionActivity extends BaseAppCompatActivity implements View
     private NuwaRobotAPI mRobotAPI;
     private IClientId mClientId;
 
-    private TextView mTexPlayStatus;
+    private TextView mTexPlayStatus;   //播放Motion執行情況
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class ControlMotionActivity extends BaseAppCompatActivity implements View
 
     }
 
-    private RobotEventCallback robotEventCallback = new RobotEventCallback() {
+    private RobotEventCallback robotEventCallback = new RobotEventCallback() {   //宣告 Motion各種情況的訊息回傳
         @Override
         public void onStartOfMotionPlay(String motion) {
             showEventMsg("[Event]Start playing Motion... ,Motion: " + motion);
@@ -72,7 +72,7 @@ public class ControlMotionActivity extends BaseAppCompatActivity implements View
     };
 
     @Override
-    protected void onStop(){
+    protected void onStop(){  //離開時處理
         super.onStop();
 
         //Step 3 : Release robotAPI before closing activity
@@ -84,29 +84,29 @@ public class ControlMotionActivity extends BaseAppCompatActivity implements View
     @Override
     protected int getLayoutRes(){
         return R.layout.activity_controlmotion;
-    }
+    } //設定layout
 
     @Override
     protected int getToolBarTitleRes(){
         return R.string.lbl_example_3;
     }
 
-    private void showEventMsg(String status){
-        runOnUiThread(()->{
+    private void showEventMsg(String status){    //在 mTexPlayStatus 新增一行新的status
+        runOnUiThread(()->{    //在UI thread時更新UI
             mTexPlayStatus.append(status);
             mTexPlayStatus.append("\n");
-            Log.d(TAG, status);
+            Log.d(TAG, status);     // TAG 在BaseAppCompatActivity宣告過 = NuwaSDKMotion
         });
 
     }
 
     private void initUIComponents(){
         mTexPlayStatus = findViewById(R.id.play_status);
-        mTexPlayStatus.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mTexPlayStatus.setOnClickListener(this);
+        mTexPlayStatus.setMovementMethod(ScrollingMovementMethod.getInstance());  //設定可滑動的TextView
+        mTexPlayStatus.setOnClickListener(this);   //設定點擊 Listener
 
 
-        int[] btnResIdList = {
+        int[] btnResIdList = {      //抓四個按鈕的 ID
                 R.id.btn_play,
                 R.id.btn_pause,
                 R.id.btn_resume,
@@ -123,15 +123,15 @@ public class ControlMotionActivity extends BaseAppCompatActivity implements View
     }
 
     @Override
-    public void onClick(View v){
+    public void onClick(View v){    //處理剛剛所有宣告的 onClickListener
         //Step 2 : Setup the click action of  "Play/Pause/Resume/Stop motion"
-        //Play motion without transparent view for the demo of other actions
-        switch(v.getId()){
+        //Play motion without transparent透明的 view for the demo of other actions
+        switch(v.getId()){   //從被 click的 ID分別
             case R.id.btn_play:
                 showEventMsg("[Click Button]Play");
-                PopupMenu popup = new PopupMenu(ControlMotionActivity.this, findViewById(R.id.btn_play));
-                popup.getMenuInflater().inflate(R.menu.popup_menu_querymotions, popup.getMenu());
-                popup.getMenu().clear();
+                PopupMenu popup = new PopupMenu(ControlMotionActivity.this, findViewById(R.id.btn_play));   //第二個參數(View) 代表 Menu在被什麼點到時會觸發
+                popup.getMenuInflater().inflate(R.menu.popup_menu_querymotions, popup.getMenu());  //需要在 res>> menu 創建一個 menu的文件 ，後面那個參數會將原本再 res內的 menu的 選項帶進來
+                popup.getMenu().clear();   //但要的選項不是在menu內預設的 ，所以先清空一次 再用 for裝進去
 
                 String[] itemList = {
                         "666_RE_Bye",
@@ -143,13 +143,13 @@ public class ControlMotionActivity extends BaseAppCompatActivity implements View
                         "666_PE_PlayGuitar",
                         "666_DA_PickUp"};
 
-                for(String item : itemList) {
+                for(String item : itemList) { //把 Menu的選項都加進去
                     popup.getMenu().add(item);
                 }
 
                 popup.setOnMenuItemClickListener((item)->{
-                    mRobotAPI.motionStop(true);
-                    mRobotAPI.motionPlay(item.getTitle().toString(), false);
+                    mRobotAPI.motionStop(true);    //先停止舊動作
+                    mRobotAPI.motionPlay(item.getTitle().toString(), false);  //再執行新動作  用 666_RE_Bye的代號去呼叫 Motion
                     return true;
                 });
 
@@ -168,10 +168,10 @@ public class ControlMotionActivity extends BaseAppCompatActivity implements View
                 showEventMsg("[Click Button]Stop");
                 mRobotAPI.motionStop(true);
                 break;
-            case R.id.play_status:
+            case R.id.play_status:   //清空textview
                 mTexPlayStatus.setText("");
             default:
-                Log.d(TAG, "Can't find the clicking action of view!!!");
+                Log.d(TAG, "Can't find the clicking action of view!!!");  // TAG 在BaseAppCompatActivity宣告過 = NuwaSDKMotion
         }
     }
 

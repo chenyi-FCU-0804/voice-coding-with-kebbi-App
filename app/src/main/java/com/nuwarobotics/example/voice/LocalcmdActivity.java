@@ -34,8 +34,12 @@ public class LocalcmdActivity extends AppCompatActivity {
 
     //prepare local command list
     ArrayList<String> cmdList = new ArrayList<String>() {{
-        add("今日の天気");
-        add("おはよう");
+        add("今天的天氣");
+        add("前進");
+        add("後退");
+        add("左轉");
+        add("右轉");
+        add("example");
     }};//you can customize this list
 
     @Override
@@ -89,8 +93,9 @@ public class LocalcmdActivity extends AppCompatActivity {
         }
 
         setText(getCurrentTime() + "Start Localcmd, You can say: ", true);
+        //把前面設定好的 指令(command)，在ArrayList內 一個一個寫到 mResult上
         for (String cmd : cmdList)
-            setText(cmd + ", ", true);
+            setText(cmd + ", ", true); //append=true >>不換行
         setText("", false);
 
         //Step 6 : call start listen by local command which registered by createGrammar
@@ -142,7 +147,7 @@ public class LocalcmdActivity extends AppCompatActivity {
     void prepareGrammarToRobot() {
         Log.d(TAG, "prepareGrammarToRobot ");
 
-        //Create Grammar class object
+        //Create Grammar class object  創一個 文法物件
         //NOTICE : please only use "lower case letter" as naming of grammar name
         SimpleGrammarData mGrammarData = new SimpleGrammarData("example");
         //setup local command list to grammar class
@@ -150,12 +155,12 @@ public class LocalcmdActivity extends AppCompatActivity {
             mGrammarData.addSlot(string);
             Log.d(TAG, "add string : " + string);
         }
-        //generate grammar data
+        //generate grammar data  產生文法資料
         mGrammarData.updateBody();
         //create and update Grammar to Robot
-        Log.d(TAG, "createGrammar " + mGrammarData.body);
+        Log.d(TAG, "createGrammar " + mGrammarData.body);   // .body =輸入的指令們
         //NOTICE : please only use "lower case letter" as naming of grammar name
-        mRobotAPI.createGrammar(mGrammarData.grammar, mGrammarData.body); // Regist cmd
+        mRobotAPI.createGrammar(mGrammarData.grammar, mGrammarData.body); // Regist cmd   .gammar就 = new SimpleGrammarData("example"); 的 example
     }
 
     RobotEventListener robotEventListener = new RobotEventListener() {
@@ -312,17 +317,18 @@ public class LocalcmdActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onSpeech2TextComplete(boolean isError, String json) {
+        public void onSpeech2TextComplete(boolean isError, String json) { //這邊沒用到
             Log.d(TAG, "onSpeech2TextComplete:" + !isError + ", json:" + json);
         }
 
         @Override
-        public void onMixUnderstandComplete(boolean isError, ResultType resultType, String s) {
+        public void onMixUnderstandComplete(boolean isError, ResultType resultType, String s) {    //開始接收指令的回傳處   這邊的 isError true= 有成功對到指令 ，false=沒有找到對應的。
             Log.d(TAG, "onMixUnderstandComplete isError:" + !isError + ", json:" + s);
             //Step 7 : Robot recognized the word of user speaking on  onMixUnderstandComplete
-            //both startMixUnderstand and startLocalCommand will receive this callback
+            //both startMixUnderstand and startLocalCommand will receive this callback       //startMixUnderstand and startLocalCommand都會 call到這個 function
+            //將結果從 Json 轉成字串。
             String result_string = VoiceResultJsonParser.parseVoiceResult(s);
-            //Step 8 : Request Robot speak what you want.
+            //Step 8 : Request Robot speak what you want.  這邊只有Show 出字串結果
             setText(getCurrentTime() + "onMixUnderstandComplete:" + !isError + ", result:" + result_string, false);
 
             runOnUiThread(new Runnable() {
@@ -346,7 +352,7 @@ public class LocalcmdActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onGrammarState(boolean isError, String s) {
+        public void onGrammarState(boolean isError, String s) { //因為要等 文法部分被設定好才能 START 跟 STOP，所以用onGrammarState 來確認 and決定兩個 Button可不可以按
             //Step 5 : Aallow user press button to trigger startLocalCommand after grammar setup ready
             //startLocalCommand only allow calling after Grammar Ready
             if (!isError) {

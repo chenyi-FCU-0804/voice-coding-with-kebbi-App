@@ -28,13 +28,14 @@ public class SensorExampleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
 
+        //Sensor觸摸顯示用 TextView做。
         mTextHead = (TextView)findViewById(R.id.textView_head);
         mTextChest = (TextView)findViewById(R.id.textViewChest);
         mTextHandRight = (TextView)findViewById(R.id.textViewRightHand);
         mTextHandLeft = (TextView)findViewById(R.id.textViewLeftHand);
         mTextFaceLeft = (TextView)findViewById(R.id.textViewLeftFace);
         mTextFaceRight = (TextView)findViewById(R.id.textViewRightFace);
-        mTextPIR = (TextView)findViewById(R.id.textViewPIR);
+        mTextPIR = (TextView)findViewById(R.id.textViewPIR);  //PIR=紅外線感應
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -63,7 +64,7 @@ public class SensorExampleActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {  // home鍵被按到的時候
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -73,7 +74,7 @@ public class SensorExampleActivity extends AppCompatActivity {
     }
     RobotEventListener robotEventListener = new RobotEventListener() {
         @Override
-        public void onWikiServiceStart() {
+        public void onWikiServiceStart() {  //在 API 設定好時跟著 requsetSensor
             // Nuwa Robot SDK is ready now, you call call Nuwa SDK API now.
             Log.d(TAG,"onWikiServiceStart, robot ready to be control ") ;
             // request touch sensor event
@@ -149,7 +150,7 @@ public class SensorExampleActivity extends AppCompatActivity {
             // type: head: 1, chest: 2, right hand: 3, left hand: 4, left face: 5,right face: 6.
             // touch: touched: 1, untouched: 0
             Log.d(TAG,"onTouchEvent type="+type+" touch="+touch);
-            int color = (touch==1)?Color.GREEN:Color.GRAY;
+            int color = (touch==1)?Color.GREEN:Color.GRAY;   //如果touch ==1 有被摸 >>變成綠色 ，不然就還是灰色。
             switch(type) {
                 case 1 :
                     mTextHead.setBackgroundColor(color);
@@ -175,14 +176,14 @@ public class SensorExampleActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onPIREvent(int val) {
+        public void onPIREvent(int val) {   //紅外線感應到>>亮綠燈
             Log.d(TAG,"onPIREvent val="+val);
             int color = (val==1)?Color.GREEN:Color.GRAY;
             mTextPIR.setBackgroundColor(color);
         }
 
         @Override
-        public void onTap(int type){
+        public void onTap(int type){    //如果只有被Tap  就傳Log的文字
             Log.d(TAG,"onTap type="+type);
             // type: head: 1, chest: 2, right hand: 3, left hand: 4, left face: 5,right face: 6.
 

@@ -78,7 +78,7 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item) {  //點到凱比的 home鍵
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -93,7 +93,7 @@ public class Main extends AppCompatActivity implements AdapterView.OnItemClickLi
         Class<?> clazz = (Class<?>) map.get("activity_class");
 
         Intent it = new Intent(this, clazz);
-        this.startActivity(it);
+        this.startActivity(it);    //把畫面切到點到的 Activity。
 
     }
 

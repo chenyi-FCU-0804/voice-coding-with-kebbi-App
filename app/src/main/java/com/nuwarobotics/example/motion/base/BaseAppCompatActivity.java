@@ -7,13 +7,13 @@ import android.support.v7.widget.Toolbar;
 
 import com.nuwarobotics.example.R;
 
-public class BaseAppCompatActivity extends AppCompatActivity {
+public class BaseAppCompatActivity extends AppCompatActivity {   //一個父類別
     protected final String TAG = "NuwaSDKMotion";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutRes());
+        setContentView(getLayoutRes());   //他說會返回一個對應的 layout(XML)
         initBaseUI();
     }
 
@@ -40,7 +40,7 @@ public class BaseAppCompatActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp(){  //在點回上一頁時的處理
         finish();
         return true;
     }
