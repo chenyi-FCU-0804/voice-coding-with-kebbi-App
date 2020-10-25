@@ -17,8 +17,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SimpleDemo.MainControlActivity"></activity>
-        <activity android:name=".SimpleDemo.LoginActivity" />
+        <activity
+            android:name=".SimpleDemo.ShowUserDataActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".SimpleDemo.LabActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".SimpleDemo.ChallengeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".SimpleDemo.MainControlActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".SimpleDemo.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".Main"
             android:theme="@style/AppTheme.NoActionBar">

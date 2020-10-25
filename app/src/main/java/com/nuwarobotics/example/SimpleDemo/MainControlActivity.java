@@ -1,63 +1,83 @@
 package com.nuwarobotics.example.SimpleDemo;
-/*先做一個粗略版的前進 後退 左轉 右轉
+/*先做一個粗略版的主頁面
 *
 * */
+import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.nuwarobotics.example.R;
-import com.nuwarobotics.service.IClientId;
-import com.nuwarobotics.service.agent.NuwaRobotAPI;
-import com.nuwarobotics.service.agent.RobotEventListener;
-import com.nuwarobotics.service.agent.VoiceEventListener;
 
-import java.util.ArrayList;
+/*
+* 用途：主畫面，前往三個主要功能
+* 進度：目前只有隨便做3個Button去到三個功能那
+* 我覺得需要在 selfMadeObject package內新增一個負責裝從資料庫那拿來的使用者資料的 class (UserData.class)，不然都要一直存取資料庫，等我們這邊有新東西+更新的時候才去更新資料庫端
+* 拿資料的動作放在 onCreate內
+* */
 
-public class MainControlActivity extends AppCompatActivity {
+public class MainControlActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String TAG = this.getClass().getSimpleName();
-    NuwaRobotAPI mRobotAPI;
-    IClientId mClientId;
-    //prepare local command list
-    ArrayList<String> cmdList = new ArrayList<String>() {{
-        add("前進");
-        add("後退");
-        add("左轉");
-        add("右轉");
-    }};//you can customize this list
+    Button toChallenge;
+    Button toLab;
+    Button toUserData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.example_layout);
+        setContentView(R.layout.activity_main_control2);
+        initUIcomponent();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    private void initUIcomponent() {
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar_mainControl);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(TAG);
-
-        //Step 1 : Initial Nuwa API Object
-        mClientId = new IClientId(this.getPackageName());
-        mRobotAPI = new NuwaRobotAPI(this,mClientId);
-
-        //Step 2 : Register receive Robot Event
-        Log.d(TAG,"register EventListener ") ;
-        mRobotAPI.registerRobotEventListener(robotEventListener);//listen callback of robot service event
-
+        ActionBar actionBar=getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle("使用者主畫面");
+        toChallenge=(Button)findViewById(R.id.button_challenge);
+        toChallenge.setOnClickListener(this);
+        toLab=(Button)findViewById(R.id.button_lab);
+        toLab.setOnClickListener(this);
+        toUserData=(Button)findViewById(R.id.button_userData);
+        toUserData.setOnClickListener(this);
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy() {//清除拿到的資料
         super.onDestroy();
-        // release Nuwa Robot SDK resource
-        mRobotAPI.release();
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void onClick(View view) {
+        Class clazz=null;
+        switch (view.getId()){
+            case R.id.button_challenge:
+                clazz=ChallengeActivity.class;
+                break;
+            case R.id.button_lab:
+                clazz=LabActivity.class;
+                break;
+            case R.id.button_userData:
+                clazz=ShowUserDataActivity.class;
+                break;
+            default:
+                Log.d(TAG, "Can't find the clicking action of view!!!");
+        }
+        if(clazz!=null){
+            Intent intent=new Intent(this,clazz);
+            startActivity(intent);
+        }
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {  //點到返回鍵處理 這邊點到要談出一個確定要登出的視窗
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -65,190 +85,4 @@ public class MainControlActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    RobotEventListener robotEventListener = new RobotEventListener() {
-        @Override
-        public void onWikiServiceStart() {
-            // Nuwa Robot SDK is ready now, you call call Nuwa SDK API now.
-            Log.d(TAG,"onWikiServiceStart, robot ready to be control ") ;
-            //Step 3 : Start Control Robot after Service ready.
-            //Register Voice Callback event
-            mRobotAPI.registerVoiceEventListener(voiceEventListener);//listen callback of robot voice related event
-            //Allow user start demo after service ready
-            //TODO
-
-        }
-
-        @Override
-        public void onWikiServiceStop() {
-
-        }
-
-        @Override
-        public void onWikiServiceCrash() {
-
-        }
-
-        @Override
-        public void onWikiServiceRecovery() {
-
-        }
-
-        @Override
-        public void onStartOfMotionPlay(String s) {
-
-        }
-
-        @Override
-        public void onPauseOfMotionPlay(String s) {
-
-        }
-
-        @Override
-        public void onStopOfMotionPlay(String s) {
-
-        }
-
-        @Override
-        public void onCompleteOfMotionPlay(String s) {
-
-        }
-
-        @Override
-        public void onPlayBackOfMotionPlay(String s) {
-
-        }
-
-        @Override
-        public void onErrorOfMotionPlay(int i) {
-
-        }
-
-        @Override
-        public void onPrepareMotion(boolean b, String s, float v) {
-
-        }
-
-        @Override
-        public void onCameraOfMotionPlay(String s) {
-
-        }
-
-        @Override
-        public void onGetCameraPose(float v, float v1, float v2, float v3, float v4, float v5, float v6, float v7, float v8, float v9, float v10, float v11) {
-
-        }
-
-        @Override
-        public void onTouchEvent(int i, int i1) {
-
-        }
-
-        @Override
-        public void onPIREvent(int i) {
-
-        }
-
-        @Override
-        public void onTap(int i) {
-
-        }
-
-        @Override
-        public void onLongPress(int i) {
-
-        }
-
-        @Override
-        public void onWindowSurfaceReady() {
-
-        }
-
-        @Override
-        public void onWindowSurfaceDestroy() {
-
-        }
-
-        @Override
-        public void onTouchEyes(int i, int i1) {
-
-        }
-
-        @Override
-        public void onRawTouch(int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onFaceSpeaker(float v) {
-
-        }
-
-        @Override
-        public void onActionEvent(int i, int i1) {
-
-        }
-
-        @Override
-        public void onDropSensorEvent(int i) {
-
-        }
-
-        @Override
-        public void onMotorErrorEvent(int i, int i1) {
-
-        }
-    };
-    VoiceEventListener voiceEventListener = new VoiceEventListener() {
-        @Override
-        public void onWakeup(boolean b, String s, float v) {
-            Log.d(TAG, "onWakeup:" + !b + ", score:" + s);
-
-        }
-
-        @Override
-        public void onTTSComplete(boolean b) {
-
-        }
-
-        @Override
-        public void onSpeechRecognizeComplete(boolean b, ResultType resultType, String s) {
-
-        }
-
-        @Override
-        public void onSpeech2TextComplete(boolean b, String s) {
-
-        }
-
-        @Override
-        public void onMixUnderstandComplete(boolean b, ResultType resultType, String s) {
-
-        }
-
-        @Override
-        public void onSpeechState(ListenType listenType, SpeechState speechState) {
-
-        }
-
-        @Override
-        public void onSpeakState(SpeakType speakType, SpeakState speakState) {
-
-        }
-
-        @Override
-        public void onGrammarState(boolean b, String s) {
-
-        }
-
-        @Override
-        public void onListenVolumeChanged(ListenType listenType, int i) {
-
-        }
-
-        @Override
-        public void onHotwordChange(HotwordState hotwordState, HotwordType hotwordType, String s) {
-
-        }
-    };
 }

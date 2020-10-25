@@ -1,14 +1,12 @@
 package com.nuwarobotics.example.SimpleDemo;
-/*目前進度：因為資料庫部分尚未完成，所以使用寫死的帳號密碼來登入。
-    帳號：kebb
-    密碼：123
-    作為登入的介面負責連接資料庫核對帳號+新增新註冊的帳號。
-    註冊部分也以Toast來表示。
-*/
+
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,7 +14,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nuwarobotics.example.R;
-
+/*目前進度：因為資料庫部分尚未完成，所以使用寫死的帳號密碼來登入。
+    帳號：k
+    密碼：1
+    作為登入的介面負責連接資料庫核對帳號+新增新註冊的帳號。
+    註冊部分也以Toast來表示。
+*/
 public class LoginActivity extends AppCompatActivity {
     //宣告layout上的View物件們
     private Button btn_login;
@@ -36,6 +39,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void initUIcomponent(){
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar_logIn);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar=getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);  //設定返回鍵
+        actionBar.setTitle("Login page of using mouth to CODE :D");
+
         btn_login=(Button)findViewById(R.id.button_login);
         btn_login.setOnClickListener(v->{
             loginDataCheck();
@@ -49,11 +58,22 @@ public class LoginActivity extends AppCompatActivity {
         textView_failHint=(TextView)findViewById(R.id.textView_failHint);
         textView_failHint.setVisibility(View.INVISIBLE);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {  //點到返回鍵處理
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void loginDataCheck(){  //確認帳號密碼
         String account,password;
         account=editText_account.getText().toString();
         password=editText_password.getText().toString();
-        if(account.equals("kebbi")&&password.equals("123")){
+        if(account.equals("k")&&password.equals("1")){
             Toast.makeText(this,"登入成功 :D Welcom Back", Toast.LENGTH_SHORT).show();
             Intent intent=new Intent(this,MainControlActivity.class);
             startActivity(intent);
