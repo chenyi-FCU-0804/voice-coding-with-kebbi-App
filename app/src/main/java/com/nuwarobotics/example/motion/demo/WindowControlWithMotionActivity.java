@@ -17,7 +17,7 @@ public class WindowControlWithMotionActivity extends BaseAppCompatActivity {
     private NuwaRobotAPI mRobotAPI;
     private IClientId mClientId;
 
-    private final String MOTION_SAMPLE = "987_EN_HappyBirthdayWaltz"; //一個指定的 Motion
+    private final String MOTION_SAMPLE = "667_P4_Answer"; //一個指定的 Motion
     private TextView mTexPlayStatus;
     Handler mainHandler;
 

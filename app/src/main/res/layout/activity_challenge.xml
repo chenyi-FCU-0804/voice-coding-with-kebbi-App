@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/DialogContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SimpleDemo.ChallengeActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_challenge"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -21,8 +22,9 @@
         android:id="@+id/textView_stageIndex"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="第一關"
+        android:text="關卡名稱"
         android:textAlignment="center"
+        android:textColor="#000000"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -33,20 +35,23 @@
         android:id="@+id/textView_misssion1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="任務解說："
+        android:textColor="#000000"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_stageIndex" />
+
     <TextView
         android:id="@+id/textView_mission2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         android:text="試著用現有的指令走到位於你前方三格的目的地吧。"
+        android:textColor="#000000"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_misssion1" />
+        app:layout_constraintStart_toEndOf="@+id/textView_misssion1"
+        app:layout_constraintTop_toBottomOf="@+id/textView_stageIndex" />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -65,12 +70,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="能使用的指令："
+            android:textColor="#000000"
             android:textSize="24sp" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecyclerView_cmdCanUse"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#78F87D" />
 
     </LinearLayout>
 
@@ -91,12 +98,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="目前準備被執行的指令："
+            android:textColor="#000000"
             android:textSize="24sp" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecyclerView_cmdHasUse"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="#F39968" />
 
     </LinearLayout>
 
@@ -114,10 +123,11 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
 
         <TextView
             android:id="@+id/textView_cmdInput"
@@ -132,9 +142,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:background="#F44336"
+            android:background="#FD4C3E"
             android:text="輸入指令開始"
-            android:textSize="22sp"/>
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/textView_cmdClear"
@@ -149,7 +159,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:background="#00BCD4"
+            android:background="#4CE8FB"
             android:text="清除指令"
             android:textSize="22sp" />
 
@@ -166,10 +176,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:background="#AAED7F"
+            android:background="#ACFF76"
             android:text="執行!!!"
             android:textSize="22sp" />
     </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

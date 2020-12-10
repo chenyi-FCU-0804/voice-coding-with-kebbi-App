@@ -2,9 +2,9 @@ package com.nuwarobotics.example.sensor;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -12,9 +12,7 @@ import android.widget.TextView;
 import com.nuwarobotics.example.R;
 import com.nuwarobotics.service.IClientId;
 import com.nuwarobotics.service.agent.NuwaRobotAPI;
-import com.nuwarobotics.service.agent.RobotEventCallback;
 import com.nuwarobotics.service.agent.RobotEventListener;
-import com.nuwarobotics.service.agent.VoiceEventListener;
 
 public class SensorExampleActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();

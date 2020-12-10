@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "605254385786",
+    "firebase_url": "https://kebbi-app.firebaseio.com",
+    "project_id": "kebbi-app",
+    "storage_bucket": "kebbi-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605254385786:android:168ff22502f22c318dfbc3",
+        "android_client_info": {
+          "package_name": "com.nuwarobotics.example"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605254385786-5id1u0s3mhekd8qn6s7j55gft0f72qne.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuTCpgaBF92CuJF-bC8XRjx1Kqh4F6qro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605254385786-5id1u0s3mhekd8qn6s7j55gft0f72qne.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

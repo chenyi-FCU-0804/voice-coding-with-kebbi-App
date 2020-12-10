@@ -1,8 +1,8 @@
 package com.nuwarobotics.example.voice;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
@@ -14,14 +14,10 @@ import com.nuwarobotics.example.R;
 import com.nuwarobotics.service.IClientId;
 import com.nuwarobotics.service.agent.NuwaRobotAPI;
 import com.nuwarobotics.service.agent.RobotEventListener;
-import com.nuwarobotics.service.agent.SimpleGrammarData;
 import com.nuwarobotics.service.agent.VoiceEventListener;
-import com.nuwarobotics.service.agent.VoiceResultJsonParser;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 
 public class TTSActivity extends AppCompatActivity {
     private final String TAG = this.getClass().getSimpleName();

@@ -15,7 +15,7 @@ public class PlayMotionActivity extends BaseAppCompatActivity {
     private NuwaRobotAPI mRobotAPI;
     private IClientId mClientId;
 
-    private final String MOTION_SAMPLE = "987_EN_HappyBirthdayWaltz";
+    private final String MOTION_SAMPLE = "666_SA_Think";
     private TextView mTexPlayStatus;
 
     @Override
