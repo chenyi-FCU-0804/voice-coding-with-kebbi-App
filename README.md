@@ -1,3 +1,4 @@
+#點開應用程式後，App位於最下面的選項，點選後即可進入app
 # `NuwaSDKExample`
 The SDK Example to control robot product of nuwarobotics.
 
